@@ -7,6 +7,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.Assert;
 import org.testng.ITestResult;
@@ -25,8 +26,16 @@ public class LoginTest {
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        
+        // Cấu hình Chạy ngầm (Headless Mode) để chạy thành công trên GitHub Actions
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--window-size=1920,1080");
+
+        driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get("https://www.saucedemo.com/");
     }
